@@ -1,0 +1,1 @@
+"use strict";const e=require("../utils/request.js");exports.getHomeData=function(){return e.get("/user/home")},exports.getProfile=function(){return e.get("/user/profile")},exports.login=function(t){return e.post("/user/login",t)},exports.miniappSilentLogin=function(t){return e.post("/user/miniapp/silent-login",t)};

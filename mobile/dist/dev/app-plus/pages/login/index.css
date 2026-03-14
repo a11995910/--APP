@@ -1,0 +1,48 @@
+
+.login-page[data-v-45258083] { min-height: 100vh; background: #fff; padding: 2.5rem 1.875rem; display: flex; flex-direction: column;
+}
+.login-header[data-v-45258083] { text-align: center; margin-bottom: 2.5rem;
+}
+.logo[data-v-45258083] { width: 5rem; height: 5rem; margin-bottom: 1rem;
+}
+.title[data-v-45258083] { font-size: 1.5rem; font-weight: 700; color: #303133; display: block; margin-bottom: 0.5rem;
+}
+.subtitle[data-v-45258083] { font-size: 0.875rem; color: #909399;
+}
+.login-form[data-v-45258083] { margin-bottom: 1.25rem;
+}
+.form-item[data-v-45258083] { 
+  display: flex; 
+  align-items: center; 
+  background: #f5f7fa; 
+  border-radius: 1.5rem; 
+  padding: 0 1rem; 
+  margin-bottom: 1rem;
+}
+.prefix[data-v-45258083] { font-size: 1rem; color: #303133; padding-right: 0.625rem; border-right: 0.0625rem solid #dcdfe6; margin-right: 0.625rem;
+}
+.input[data-v-45258083] { flex: 1; height: 3.125rem; font-size: 1rem;
+}
+.login-btn[data-v-45258083] {
+  height: 2.75rem;
+  line-height: 2.75rem;
+  background: #ff4d3a;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 0.375rem;
+  border: none;
+}
+.login-btn[disabled][data-v-45258083] {
+  opacity: 0.65;
+  background: #ffb1a8;
+}
+.login-btn[data-v-45258083]::after {
+  border: none;
+}
+.login-footer[data-v-45258083] { display: flex; justify-content: center; flex-wrap: wrap;
+}
+.tip[data-v-45258083] { font-size: 0.75rem; color: #909399;
+}
+.link[data-v-45258083] { font-size: 0.75rem; color: #ff6c5d;
+}
