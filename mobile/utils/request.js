@@ -1,16 +1,22 @@
 /**
  * HTTP请求基础地址。
- * 说明：默认使用当前开发机的局域网地址，便于手机真机联调。
- * 说明：如需切回本机回环地址或其他环境，可通过缓存 `api_base_url` 覆盖。
+ * 说明：默认读取 `siteinfo.js` 中当前激活环境的接口地址。
+ * 说明：如需临时强制覆盖，仍可通过缓存 `api_base_url` 覆盖。
  */
-const DEFAULT_BASE_URL = 'http://192.168.1.44:3000/api/v1'
+import { getCurrentApiBaseUrl } from './siteinfo'
+
+/**
+ * 强制覆盖接口地址的缓存键。
+ * @type {string}
+ */
+const API_BASE_URL_OVERRIDE_KEY = 'api_base_url'
 
 /**
  * 获取当前请求基础地址。
  * @returns {string} 请求基础地址。
  */
 function getBaseUrl() {
-    return uni.getStorageSync('api_base_url') || DEFAULT_BASE_URL
+    return uni.getStorageSync(API_BASE_URL_OVERRIDE_KEY) || getCurrentApiBaseUrl()
 }
 
 /**

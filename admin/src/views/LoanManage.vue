@@ -1,6 +1,9 @@
 <script setup>
 /**
- * 贷款管理页面
+ * 贷款管理页面。
+ * 说明：
+ * 1. 默认按创建时间倒序展示。
+ * 2. 支持切换为按到期日升序展示，便于优先处理即将到期与已逾期贷款。
  */
 import { ref, reactive, onMounted } from 'vue'
 import { getLoanList, getLoanStats } from '../api/loan'
@@ -15,7 +18,8 @@ const searchParams = reactive({
   page: 1,
   pageSize: 10,
   keyword: '',
-  status: ''
+  status: '',
+  sortBy: 'created_at'
 })
 
 // 统计数据
@@ -27,7 +31,10 @@ const stats = ref({
   monthly_repayment: 0
 })
 
-// 加载数据
+/**
+ * 加载贷款表格数据。
+ * @returns {Promise<void>} 无返回值。
+ */
 const loadData = async () => {
   loading.value = true
   try {
@@ -41,7 +48,10 @@ const loadData = async () => {
   }
 }
 
-// 加载统计
+/**
+ * 加载顶部统计数据。
+ * @returns {Promise<void>} 无返回值。
+ */
 const loadStats = async () => {
   const res = await getLoanStats()
   if (res.success) {
@@ -49,28 +59,63 @@ const loadStats = async () => {
   }
 }
 
-// 搜索
+/**
+ * 执行筛选搜索。
+ * 行为：重置到第一页后重新拉取列表。
+ */
 const handleSearch = () => {
   searchParams.page = 1
   loadData()
 }
 
-// 重置
+/**
+ * 重置搜索条件。
+ * 行为：恢复默认状态与默认排序。
+ */
 const handleReset = () => {
   searchParams.keyword = ''
   searchParams.status = ''
+  searchParams.sortBy = 'created_at'
   handleSearch()
 }
 
-// 分页变化
+/**
+ * 处理分页变化。
+ * @param {number} page 当前页码。
+ */
 const handlePageChange = (page) => {
   searchParams.page = page
   loadData()
 }
 
-// 格式化金额
+/**
+ * 格式化金额显示。
+ * @param {number|string} val 金额值。
+ * @returns {string} 千分位金额字符串。
+ */
 const formatMoney = (val) => {
   return Number(val || 0).toLocaleString('zh-CN', { minimumFractionDigits: 2 })
+}
+
+/**
+ * 格式化日期显示。
+ * 说明：统一将后端返回的 ISO 字符串格式化为 `YYYY-MM-DD`，避免后台直接展示 UTC 原始串。
+ * @param {string} value 原始日期值。
+ * @returns {string} 格式化后的日期字符串。
+ */
+const formatDate = (value) => {
+  if (!value) return '-'
+
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) {
+    return String(value).slice(0, 10) || '-'
+  }
+
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+
+  return `${year}-${month}-${day}`
 }
 
 onMounted(() => {
@@ -153,6 +198,12 @@ onMounted(() => {
           </el-select>
         </el-form-item>
         <el-form-item>
+          <el-select v-model="searchParams.sortBy" placeholder="排序方式" style="width: 170px">
+            <el-option label="按创建时间排序" value="created_at" />
+            <el-option label="按到期时间排序" value="end_date" />
+          </el-select>
+        </el-form-item>
+        <el-form-item>
           <el-button type="primary" @click="handleSearch">搜索</el-button>
           <el-button @click="handleReset">重置</el-button>
         </el-form-item>
@@ -183,7 +234,11 @@ onMounted(() => {
             {{ row.remind_days }}天
           </template>
         </el-table-column>
-        <el-table-column prop="end_date" label="到期日" width="110" />
+        <el-table-column prop="end_date" label="到期日" width="120">
+          <template #default="{ row }">
+            {{ formatDate(row.end_date) }}
+          </template>
+        </el-table-column>
         <el-table-column prop="status" label="状态" width="90">
           <template #default="{ row }">
             <el-tag :type="row.status === 1 ? 'success' : 'info'" size="small">

@@ -90,7 +90,11 @@ mobile/
 ## 注意事项
 
 1. 开发前请确保后端服务已启动
-2. 当前默认接口地址已切到局域网联调地址 `http://192.168.1.44:3000/api/v1`，如需切换可通过 `uni.setStorageSync('api_base_url', 'http://IP:3000/api/v1')` 覆盖
-3. 微信小程序需要在 `manifest.json` 中配置正确的 appid
-4. 若启用小程序 openid 静默登录，后端 `.env` 需配置 `WECHAT_MINIAPP_APP_ID` 与 `WECHAT_MINIAPP_APP_SECRET`
-5. 若启用 APP 真正推送，需在云打包/HBuilderX 中配置可用的推送服务，并保证服务端与客户端使用同一推送通道
+2. 当前移动端默认接口地址由 `/Users/wangjun/Documents/GitHub/金融APP/mobile/utils/siteinfo.js` 统一管理，默认环境为 `production`
+3. 如需切换环境，可执行：
+   - 切换生产环境：`uni.setStorageSync('site_env', 'production')`
+   - 切换开发环境：`uni.setStorageSync('site_env', 'development')`
+4. 如需临时直接覆盖接口地址，仍可通过 `uni.setStorageSync('api_base_url', 'http://IP:3000/api/v1')` 覆盖
+5. 微信小程序需要在 `manifest.json` 中配置正确的 appid
+6. 若启用小程序 openid 静默登录，后端 `.env` 需配置 `WECHAT_MINIAPP_APP_ID` 与 `WECHAT_MINIAPP_APP_SECRET`
+7. 若启用 APP 真正推送，需在云打包/HBuilderX 中配置可用的推送服务，并保证服务端与客户端使用同一推送通道

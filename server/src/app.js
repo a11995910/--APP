@@ -20,15 +20,53 @@ const notifyService = require('./services/notifyService');
 // 创建Express应用
 const app = express();
 
+/**
+ * 允许访问后端接口的来源列表。
+ * 说明：
+ * 1. 正式域名用于后台管理端与未来 H5 场景。
+ * 2. `127.0.0.1 / localhost` 用于微信开发者工具、浏览器本地调试与内嵌 WebView 调试。
+ * 3. 无 `origin` 的请求通常来自小程序原生网络层、服务端探活或命令行请求，也应放行。
+ * @type {string[]}
+ */
+const ALLOWED_CORS_ORIGINS = [
+    'https://www.youkeduo.site',
+    'http://www.youkeduo.site',
+    'https://youkeduo.site',
+    'http://youkeduo.site',
+    'http://127.0.0.1',
+    'https://127.0.0.1',
+    'http://localhost',
+    'https://localhost'
+];
+
+/**
+ * 校验当前来源是否允许访问。
+ * @param {string | undefined} origin 请求来源。
+ * @returns {boolean} 是否允许跨域访问。
+ */
+function isAllowedCorsOrigin(origin) {
+    if (!origin) {
+        return true;
+    }
+
+    return ALLOWED_CORS_ORIGINS.some((allowedOrigin) => origin.startsWith(allowedOrigin));
+}
+
 // ==================== 中间件配置 ====================
 
 // CORS跨域配置
 app.use(cors({
-    origin: process.env.NODE_ENV === 'production'
-        ? ['https://your-domain.com']
-        : '*',
+    origin(origin, callback) {
+        if (isAllowedCorsOrigin(origin)) {
+            callback(null, true);
+            return;
+        }
+
+        callback(new Error(`CORS origin not allowed: ${origin}`));
+    },
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: false
 }));
 
 // 请求体解析

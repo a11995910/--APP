@@ -199,3 +199,8 @@ npm test
 1. 生产环境请务必修改 `JWT_SECRET`
 2. 短信和推送服务需要配置真实的API密钥才能使用
 3. 建议使用PM2进行生产环境部署
+4. 当前 CORS 已显式放行：
+   - `https://www.youkeduo.site`
+   - `http://127.0.0.1`
+   - `http://localhost`
+   这样可同时兼容线上后台域名与微信开发者工具本地调试来源

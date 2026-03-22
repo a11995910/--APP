@@ -441,14 +441,15 @@ async function markAsCompleted(req, res, next) {
  */
 async function getLoanList(req, res, next) {
     try {
-        const { page = 1, pageSize = 10, userId, status, keyword } = req.query;
+        const { page = 1, pageSize = 10, userId, status, keyword, sortBy = 'created_at' } = req.query;
 
         const result = await Loan.getList({
             page: parseInt(page),
             pageSize: parseInt(pageSize),
             userId: (userId && userId !== '') ? parseInt(userId) : undefined,
             status: (status !== undefined && status !== '') ? parseInt(status) : undefined,
-            keyword
+            keyword,
+            sortBy
         });
 
         res.json(response.paginate(result.list, result.total, page, pageSize));

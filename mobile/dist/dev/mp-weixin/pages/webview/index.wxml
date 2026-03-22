@@ -1,1 +1,0 @@
-<view class="webview-page data-v-f397c225"><web-view wx:if="{{a}}" class="data-v-f397c225" src="{{b}}"/><view wx:else class="empty-state data-v-f397c225"><text class="empty-title data-v-f397c225">链接无效</text><text class="empty-desc data-v-f397c225">未找到可打开的网页地址</text></view></view>

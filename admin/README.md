@@ -46,17 +46,22 @@ npm run dev
 
 默认访问地址：`http://localhost:5173`
 
-## 环境变量
+## 站点环境切换
 
-通过 `VITE_API_BASE_URL` 指定后端接口地址。
+- 后台统一环境配置文件：`/Users/wangjun/Documents/GitHub/金融APP/admin/src/config/siteinfo.js`
+- 当前默认环境：`production`
+- 开发环境接口：`http://192.168.1.44:3000/api/v1`
+- 生产环境接口：`https://www.youkeduo.site/api/v1`
+- 后台请求层固定从 `siteinfo.js` 读取地址，不再使用 `VITE_API_BASE_URL`，避免构建环境变量把线上地址覆盖回本地。
+- 如需在浏览器里临时切换，可执行：
 
-示例：
-
-```bash
-VITE_API_BASE_URL=http://localhost:3000/api/v1
+```js
+localStorage.setItem('admin_site_env', 'development')
+// 或
+localStorage.setItem('admin_site_env', 'production')
 ```
 
-如果未配置，默认使用：`http://localhost:3000/api/v1`
+- 切换后刷新页面即可生效。
 
 ## 登录信息
 

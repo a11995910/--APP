@@ -428,7 +428,8 @@ class Loan {
             pageSize = 10,
             userId,
             status,
-            keyword
+            keyword,
+            sortBy = 'created_at'
         } = options;
 
         const whereClauses = [];
@@ -461,6 +462,16 @@ class Loan {
         const pageNum = parseInt(page) || 1;
         const pageSizeNum = parseInt(pageSize) || 10;
         const offset = (pageNum - 1) * pageSizeNum;
+        const normalizedSortBy = sortBy === 'end_date' ? 'end_date' : 'created_at';
+
+        /**
+         * 后台贷款列表排序规则。
+         * 1. 默认按创建时间倒序，便于查看最新录入内容。
+         * 2. 到期时间排序按结束日期升序，逾期记录会自然排在最前面。
+         */
+        const orderBySql = normalizedSortBy === 'end_date'
+            ? 'ORDER BY l.end_date ASC, l.created_at DESC'
+            : 'ORDER BY l.created_at DESC';
 
         const listSQL = `
             SELECT
@@ -475,7 +486,7 @@ class Loan {
             LEFT JOIN users u ON l.user_id = u.id
             LEFT JOIN loan_plan_configs c ON l.id = c.loan_id
             ${whereSQL}
-            ORDER BY l.created_at DESC
+            ${orderBySql}
             LIMIT ${pageSizeNum} OFFSET ${offset}
         `;
 

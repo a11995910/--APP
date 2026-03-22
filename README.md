@@ -151,6 +151,50 @@ npm run dev:h5
 - 当前 APP 真机安装仍需在 `HBuilderX -> 发行 -> 原生App-云打包 -> Android -> APK` 中生成最终 `.apk`
 - 为规避当前应用名触发的 DCloud 资质校验，移动端应用名已临时调整为 `贷款提醒测试版`，用于测试期重新获取 AppID 与云打包验证
 - 移动端默认联调接口已切换为局域网地址：`http://192.168.1.44:3000/api/v1`
+- 已完成服务器首轮部署：
+  - 服务器：`118.89.91.26`
+  - 域名：`https://www.youkeduo.site`
+  - 后端健康检查：`https://www.youkeduo.site/health`
+  - 后端 API 前缀：`https://www.youkeduo.site/api/v1`
+  - 后台管理入口：`https://www.youkeduo.site`
+- 服务器部署结构：
+  - 项目目录：`/var/www/loan-app`
+  - 后端进程：`pm2 -> loan-reminder-server`
+  - Nginx 站点配置：`/etc/nginx/sites-available/loan-app`
+  - MySQL 数据库：`loan_reminder`
+- 当前服务器环境：
+  - `Node.js 18.19.1`
+  - `npm 10.9.6`
+  - `MySQL 8.0`
+  - `Nginx 1.24`
+  - `PM2 6.0.14`
+- 当前后台默认管理员账号已在服务器初始化并修正：
+  - 用户名：`admin`
+  - 密码：`admin123`
+- 已切换移动端默认接口到线上正式域名：`https://www.youkeduo.site/api/v1`
+- 已新增环境配置切换机制：
+  - 移动端环境配置文件：`/Users/wangjun/Documents/GitHub/金融APP/mobile/utils/siteinfo.js`
+  - 后台环境配置文件：`/Users/wangjun/Documents/GitHub/金融APP/admin/src/config/siteinfo.js`
+  - 当前默认环境：`production`
+  - 开发环境地址：`http://192.168.1.44:3000/api/v1`
+  - 生产环境地址：`https://www.youkeduo.site/api/v1`
+- 已补充后台贷款管理优化：
+  - 到期日统一按 `YYYY-MM-DD` 展示，避免直接显示 UTC ISO 字符串
+  - 新增贷款列表排序方式切换：
+    - 默认：按创建时间倒序
+    - 可选：按到期时间升序（到期越近越靠前，已过期自然排在最前）
+- 已更新微信小程序正式配置：
+  - 小程序 `AppID` 已同步到 `manifest.json`
+  - 后端静默登录 `AppID/Secret` 已同步到服务器环境变量
+- 已修正后台正式环境接口地址读取逻辑：
+  - 后台请求层改为固定从 `admin/src/config/siteinfo.js` 读取接口地址
+  - 不再使用构建环境变量覆盖 `baseURL`，避免线上请求错误落回 `http://localhost:3000`
+- 已确认正式域名访问异常的根因来自本机代理 / Fake-IP 劫持：
+  - 关闭代理后，`https://www.youkeduo.site` 与小程序正式域名请求恢复正常
+- 已补充后端 CORS 白名单：
+  - 放行 `https://www.youkeduo.site`
+  - 放行 `http://127.0.0.1` / `http://localhost`
+  - 用于兼容微信开发者工具本地调试时通过正式域名请求线上接口
 
 ## 子项目文档
 
