@@ -136,6 +136,14 @@ npm start
 | DELETE | /api/v1/loans/:id | 删除贷款 |
 | POST | /api/v1/loans/:id/complete | 标记已结清 |
 
+### 上传接口
+
+| 方法 | 路径 | 描述 |
+|------|------|------|
+| POST | /api/v1/upload/image | 上传图片文件 |
+
+上传接口只允许 JPG、PNG、GIF、WEBP 图片。服务端会同时校验 `Content-Type`、原始文件扩展名和真实文件头，并按校验后的图片类型重新生成存储扩展名，避免脚本文件伪装成图片落入公开 `uploads` 目录。生产 Nginx 也应拒绝访问 `/uploads/` 下的 PHP 类脚本后缀文件，作为入口层兜底。
+
 ### 后台管理接口
 
 所有后台接口都以 `/api/v1/admin` 开头，需要管理员认证。
